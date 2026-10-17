@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:gamificacao-adaptativa:schema:state",
+  "title": "User state",
+  "description": "Serializable per-user state. Stored by the app and passed back to the engine. The state does NOT depend on the catalog: it lives in the 6-dimensional Hexad space, so catalog changes do not invalidate it.",
+  "type": "object",
+  "properties": {
+    "schemaVersion": { "const": "0.1" },
+    "userId": { "$ref": "urn:gamificacao-adaptativa:schema:common#/$defs/Id" },
+    "dimensions": {
+      "description": "Order of the 6 dimensions used by A and b. Self-describing, for ports.",
+      "const": ["achiever", "player", "socialiser", "freeSpirit", "disruptor", "philanthropist"]
+    },
+    "A": {
+      "description": "Posterior precision matrix (symmetric positive definite). Sigma = A^-1.",
+      "$ref": "urn:gamificacao-adaptativa:schema:common#/$defs/Matrix6"
+    },
+    "b": {
+      "description": "Precision-weighted mean accumulator. mu = A^-1 b.",
+      "$ref": "urn:gamificacao-adaptativa:schema:common#/$defs/Vector6"
+    },
+    "sessionsObserved": { "type": "integer", "minimum": 0 },
+    "updatedAt": { "oneOf": [{ "$ref": "urn:gamificacao-adaptativa:schema:common#/$defs/EpochMillis" }, { "type": "null" }] },
+    "rng": {
+      "description": "Counter-based deterministic generator: draws are a pure function of (seed, userId, counter).",
+      "type": "object",
+      "properties": {
+        "seed": { "type": "integer" },
+        "counter": { "type": "integer", "minimum": 0 }
+      },
+      "required": ["seed", "counter"],
+      "additionalProperties": false
+    },
+    "lastDecision": {
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "properties": {
+            "sessionId": { "$ref": "urn:gamificacao-adaptativa:schema:common#/$defs/Id" },
+            "at": { "$ref": "urn:gamificacao-adaptativa:schema:common#/$defs/EpochMillis" },
+            "weights": {
+              "type": "object",
+              "additionalProperties": { "$ref": "urn:gamificacao-adaptativa:schema:common#/$defs/Unit" }
+            },
+            "sampledProfile": { "$ref": "urn:gamificacao-adaptativa:schema:common#/$defs/Vector6" }
+          },
+          "required": ["sessionId", "at", "weights", "sampledProfile"],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "recentSessionIds": {
+      "description": "Last processed session ids (most recent last), to make update() idempotent. The engine caps this list at 64.",
+      "type": "array",
+      "items": { "$ref": "urn:gamificacao-adaptativa:schema:common#/$defs/Id" },
+      "maxItems": 64
+    }
+  },
+  "required": ["schemaVersion", "userId", "dimensions", "A", "b", "sessionsObserved", "updatedAt", "rng", "lastDecision", "recentSessionIds"],
+  "additionalProperties": false
+}

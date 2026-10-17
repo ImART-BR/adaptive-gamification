@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:gamificacao-adaptativa:schema:event",
+  "title": "Adaptive event",
+  "description": "Events sent to update(). A batch must contain COMPLETE sessions.",
+  "oneOf": [
+    { "$ref": "#/$defs/ExposureEvent" },
+    { "$ref": "#/$defs/InteractionEvent" },
+    { "$ref": "#/$defs/OutcomeEvent" }
+  ],
+  "$defs": {
+    "ExposureEvent": {
+      "description": "Element X was shown to the user, with a degree of prominence in [0,1] (0 = not actually visible; ignored).",
+      "type": "object",
+      "properties": {
+        "type": { "const": "exposure" },
+        "userId": { "$ref": "urn:gamificacao-adaptativa:schema:common#/$defs/Id" },
+        "sessionId": { "$ref": "urn:gamificacao-adaptativa:schema:common#/$defs/Id" },
+        "at": { "$ref": "urn:gamificacao-adaptativa:schema:common#/$defs/EpochMillis" },
+        "elementId": { "$ref": "urn:gamificacao-adaptativa:schema:common#/$defs/Id" },
+        "prominence": { "$ref": "urn:gamificacao-adaptativa:schema:common#/$defs/Unit" }
+      },
+      "required": ["type", "userId", "sessionId", "at", "elementId", "prominence"],
+      "additionalProperties": false
+    },
+    "InteractionEvent": {
+      "description": "The user did something with element X (opened, clicked, used).",
+      "type": "object",
+      "properties": {
+        "type": { "const": "interaction" },
+        "userId": { "$ref": "urn:gamificacao-adaptativa:schema:common#/$defs/Id" },
+        "sessionId": { "$ref": "urn:gamificacao-adaptativa:schema:common#/$defs/Id" },
+        "at": { "$ref": "urn:gamificacao-adaptativa:schema:common#/$defs/EpochMillis" },
+        "elementId": { "$ref": "urn:gamificacao-adaptativa:schema:common#/$defs/Id" }
+      },
+      "required": ["type", "userId", "sessionId", "at", "elementId"],
+      "additionalProperties": false
+    },
+    "OutcomeEvent": {
+      "description": "The user performed the app's target behavior, credited to this session. value in [0,1] (e.g. fraction of the day's reviews completed). A value of 0 may be sent explicitly.",
+      "type": "object",
+      "properties": {
+        "type": { "const": "outcome" },
+        "userId": { "$ref": "urn:gamificacao-adaptativa:schema:common#/$defs/Id" },
+        "sessionId": { "$ref": "urn:gamificacao-adaptativa:schema:common#/$defs/Id" },
+        "at": { "$ref": "urn:gamificacao-adaptativa:schema:common#/$defs/EpochMillis" },
+        "kind": { "type": "string", "minLength": 1, "default": "target", "description": "Key into config.outcomeKinds." },
+        "value": { "$ref": "urn:gamificacao-adaptativa:schema:common#/$defs/Unit" }
+      },
+      "required": ["type", "userId", "sessionId", "at", "value"],
+      "additionalProperties": false
+    }
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:gamificacao-adaptativa:schema:config",
+  "title": "Engine configuration",
+  "description": "Static configuration of the engine. Defaults are placeholders; the calibrated values are in DEFAULTS of the engine.",
+  "type": "object",
+  "properties": {
+    "schemaVersion": { "const": "0.1" },
+    "catalog": { "$ref": "urn:gamificacao-adaptativa:schema:catalog" },
+    "forgetting": {
+      "description": "gamma in (0,1]. 1 = no forgetting.",
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "maximum": 1,
+      "default": 0.98
+    },
+    "priorVariance": {
+      "description": "sigma_delta^2: prior variance of the DIFFERENCES between the 6 dimensions (the preferences). Used when priorCovariance is absent: Sigma0 = sigma_delta^2 * P + sigma_c^2 * Q, with P = I - 11'/6 and Q = 11'/6.",
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "default": 0.5
+    },
+    "levelPriorVariance": {
+      "description": "sigma_c^2: prior variance of the LEVEL (mean of the 6 dimensions, i.e. the intercept of the reward model). Nearly diffuse by default so the level absorbs the user's average reward instead of it being read as a preference. Ignored when priorCovariance is given.",
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "default": 100
+    },
+    "priorMean": {
+      "description": "mu0. Default: all zeros (neutral profile; only differences between dimensions matter for ranking).",
+      "$ref": "urn:gamificacao-adaptativa:schema:common#/$defs/HexadVector"
+    },
+    "priorCovariance": {
+      "description": "Sigma0 as a symmetric positive-definite 6x6 matrix, in Hexad dimension order. Overrides priorVariance. Hook for population priors.",
+      "$ref": "urn:gamificacao-adaptativa:schema:common#/$defs/Matrix6"
+    },
+    "noiseVariance": {
+      "description": "Observation noise variance of the session reward, as the model sees it. Rewards in [0,1] have variance <= 0.25 (sub-Gaussian R=1/2), but the calibration (synthetic worlds) preferred a smaller value because a too-large one makes the engine ignore the information in each session; a too-small one (0.02) made it overconfident, fitting noise as preference. To be estimated from pilot data.",
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "default": 0.05
+    },
+    "samplingScale": {
+      "description": "v: the posterior sample is mu + v * chol(Sigma) * z. 1 = plain Thompson Sampling; the regret theory of Agrawal & Goyal needs v > 1. The default (0.15) is nearly greedy: it was chosen in the calibration because a noisy sample made the interface change a lot from session to session (churn) for little gain. It gives up the theoretical guarantee on purpose.",
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "default": 0.15
+    },
+    "exposureFloor": {
+      "description": "Minimum output weight of any element.",
+      "$ref": "urn:gamificacao-adaptativa:schema:common#/$defs/Unit",
+      "default": 0.1
+    },
+    "neutralWeight": {
+      "description": "Output weight of every element under the neutral profile, before clamping.",
+      "$ref": "urn:gamificacao-adaptativa:schema:common#/$defs/Unit",
+      "default": 0.5
+    },
+    "sensitivity": {
+      "description": "Gain from score difference (s_e - mean s) to weight. Scores are in units of expected reward, so differences between elements are small (~0.05); a large gain is needed to use the [floor, 1] range. With the default, weights are close to a ranking (highlight vs reduce).",
+      "type": "number",
+      "minimum": 0,
+      "default": 16
+    },
+    "outcomeKinds": {
+      "description": "Weight of each outcome kind in the session reward. Keys are app-defined; the default app uses a single kind 'target'.",
+      "type": "object",
+      "additionalProperties": { "type": "number", "exclusiveMinimum": 0 },
+      "minProperties": 1,
+      "default": { "target": 1 }
+    },
+    "missingOutcome": {
+      "description": "What to do with a closed session that has no outcome event of a configured kind: treat its value as 0, or skip the session.",
+      "enum": ["zero", "skip"],
+      "default": "zero"
+    },
+    "interactionRewardWeight": {
+      "description": "omega: weight of the auxiliary interaction signal in the session reward. Keep low.",
+      "$ref": "urn:gamificacao-adaptativa:schema:common#/$defs/Unit",
+      "default": 0.05
+    },
+    "seed": {
+      "description": "Seed of the deterministic random generator. Same seed + same events = same decisions.",
+      "type": "integer",
+      "default": 0
+    }
+  },
+  "required": ["schemaVersion", "catalog"],
+  "additionalProperties": false
+}

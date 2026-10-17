@@ -1,0 +1,35 @@
+{
+  "name": "gamificacao-adaptativa-workspace",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Adaptive gamification core (Hexad profile + discounted linear Thompson Sampling), simulator and reference app. Workspace root; packages are split for publishing in F7.",
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "node --test \"packages/core/test/*.test.ts\" \"packages/app-server/test/*.test.ts\" \"packages/simulator/test/*.test.ts\"",
+    "sim": "node packages/simulator/src/run.ts",
+    "sim:web": "vite --config packages/simulator/web/vite.config.ts --open",
+    "build:sim": "vite build --config packages/simulator/web/vite.config.ts",
+    "dev:server": "node --watch packages/app-server/src/server.ts",
+    "dev:web": "vite --config packages/app-web/vite.config.ts",
+    "build:web": "vite build --config packages/app-web/vite.config.ts",
+    "start": "node packages/app-server/src/server.ts",
+    "export": "node packages/app-server/src/export.ts",
+    "admin": "node packages/app-server/src/admin.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "ajv": "^8.20.0",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.4"
+  },
+  "dependencies": {
+    "@hono/node-server": "^2.1.5",
+    "hono": "^4.13.13",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  }
+}

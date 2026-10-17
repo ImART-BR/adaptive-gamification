@@ -1,0 +1,9 @@
+node_modules/
+tools/node/
+*.log
+data/
+packages/app-web/dist/
+.claude/
+packages/simulator/web/dist/
+.DS_Store
+docs/

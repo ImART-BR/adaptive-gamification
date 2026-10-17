@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:gamificacao-adaptativa:schema:catalog",
+  "title": "Catalog of game elements",
+  "description": "Provided by the integrating app. The Hexad signature of each element is a PRIOR, not ground truth.",
+  "type": "object",
+  "properties": {
+    "schemaVersion": { "const": "0.1" },
+    "elements": {
+      "type": "array",
+      "minItems": 2,
+      "items": { "$ref": "#/$defs/GameElement" }
+    }
+  },
+  "required": ["schemaVersion", "elements"],
+  "additionalProperties": false,
+  "$defs": {
+    "GameElement": {
+      "type": "object",
+      "properties": {
+        "id": { "$ref": "urn:gamificacao-adaptativa:schema:common#/$defs/Id" },
+        "signature": { "$ref": "urn:gamificacao-adaptativa:schema:common#/$defs/HexadSignature" },
+        "label": { "type": "string", "description": "Human-readable name (for explanations and logs)." },
+        "variant": { "type": "string", "description": "Implementation variant of the same motivational strategy; different variants should be different elements (Hallifax et al. 2019b)." }
+      },
+      "required": ["id", "signature"],
+      "additionalProperties": false
+    }
+  }
+}

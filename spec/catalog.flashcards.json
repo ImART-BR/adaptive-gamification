@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "0.1",
+  "elements": [
+    { "id": "levels",             "label": "Níveis",                              "signature": { "achiever": 0.55, "player": 0.25, "socialiser": 0.05, "freeSpirit": 0.05, "disruptor": 0.05, "philanthropist": 0.05 } },
+    { "id": "mastery_bar",        "label": "Barra de domínio por baralho",        "signature": { "achiever": 0.60, "player": 0.10, "socialiser": 0.00, "freeSpirit": 0.20, "disruptor": 0.05, "philanthropist": 0.05 } },
+    { "id": "challenges",         "label": "Desafios",                            "signature": { "achiever": 0.50, "player": 0.20, "socialiser": 0.10, "freeSpirit": 0.05, "disruptor": 0.10, "philanthropist": 0.05 } },
+    { "id": "achievements",       "label": "Conquistas",                          "signature": { "achiever": 0.45, "player": 0.30, "socialiser": 0.05, "freeSpirit": 0.10, "disruptor": 0.05, "philanthropist": 0.05 } },
+
+    { "id": "points",             "label": "Pontos",                              "signature": { "achiever": 0.20, "player": 0.60, "socialiser": 0.05, "freeSpirit": 0.05, "disruptor": 0.05, "philanthropist": 0.05 } },
+    { "id": "leaderboard",        "label": "Ranking",                             "signature": { "achiever": 0.20, "player": 0.45, "socialiser": 0.20, "freeSpirit": 0.00, "disruptor": 0.10, "philanthropist": 0.05 } },
+    { "id": "cosmetic_rewards",   "label": "Recompensas cosméticas",              "signature": { "achiever": 0.10, "player": 0.45, "socialiser": 0.05, "freeSpirit": 0.30, "disruptor": 0.05, "philanthropist": 0.05 } },
+
+    { "id": "study_groups",       "label": "Grupos de estudo",                    "signature": { "achiever": 0.05, "player": 0.05, "socialiser": 0.65, "freeSpirit": 0.05, "disruptor": 0.05, "philanthropist": 0.15 } },
+    { "id": "activity_feed",      "label": "Feed de atividade dos colegas",       "signature": { "achiever": 0.10, "player": 0.15, "socialiser": 0.55, "freeSpirit": 0.05, "disruptor": 0.05, "philanthropist": 0.10 } },
+    { "id": "pair_study",         "label": "Estudo em dupla",                     "signature": { "achiever": 0.10, "player": 0.05, "socialiser": 0.55, "freeSpirit": 0.05, "disruptor": 0.05, "philanthropist": 0.20 } },
+
+    { "id": "share_decks",        "label": "Compartilhar baralhos",               "signature": { "achiever": 0.05, "player": 0.00, "socialiser": 0.20, "freeSpirit": 0.05, "disruptor": 0.10, "philanthropist": 0.60 } },
+    { "id": "answer_peers",       "label": "Responder dúvidas de colegas",        "signature": { "achiever": 0.05, "player": 0.00, "socialiser": 0.25, "freeSpirit": 0.05, "disruptor": 0.05, "philanthropist": 0.60 } },
+    { "id": "gifting",            "label": "Presentear colegas",                  "signature": { "achiever": 0.00, "player": 0.10, "socialiser": 0.20, "freeSpirit": 0.05, "disruptor": 0.10, "philanthropist": 0.55 } },
+
+    { "id": "explore_catalog",    "label": "Catálogo para explorar",              "signature": { "achiever": 0.05, "player": 0.00, "socialiser": 0.05, "freeSpirit": 0.60, "disruptor": 0.15, "philanthropist": 0.15 } },
+    { "id": "nonlinear_paths",    "label": "Trilhas não lineares",                "signature": { "achiever": 0.10, "player": 0.00, "socialiser": 0.05, "freeSpirit": 0.65, "disruptor": 0.15, "philanthropist": 0.05 } },
+    { "id": "avatar_theme",       "label": "Personalização de avatar e tema",     "signature": { "achiever": 0.00, "player": 0.20, "socialiser": 0.10, "freeSpirit": 0.55, "disruptor": 0.10, "philanthropist": 0.05 } },
+
+    { "id": "create_remix_decks", "label": "Criar e remixar baralhos",            "signature": { "achiever": 0.05, "player": 0.05, "socialiser": 0.05, "freeSpirit": 0.25, "disruptor": 0.50, "philanthropist": 0.10 } },
+    { "id": "vote_features",      "label": "Votar em funcionalidades",            "signature": { "achiever": 0.05, "player": 0.00, "socialiser": 0.15, "freeSpirit": 0.10, "disruptor": 0.60, "philanthropist": 0.10 } },
+    { "id": "suggest_edits",      "label": "Sugerir edições de cartões",          "signature": { "achiever": 0.10, "player": 0.00, "socialiser": 0.05, "freeSpirit": 0.10, "disruptor": 0.55, "philanthropist": 0.20 } }
+  ]
+}

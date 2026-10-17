@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:gamificacao-adaptativa:schema:common",
+  "title": "Common definitions",
+  "description": "Shared definitions. Contract draft v0.1. Hexad dimension order is fixed: achiever, player, socialiser, freeSpirit, disruptor, philanthropist.",
+  "$defs": {
+    "HexadType": {
+      "enum": ["achiever", "player", "socialiser", "freeSpirit", "disruptor", "philanthropist"]
+    },
+    "HexadVector": {
+      "description": "One number per Hexad type, keyed by name.",
+      "type": "object",
+      "properties": {
+        "achiever": { "type": "number" },
+        "player": { "type": "number" },
+        "socialiser": { "type": "number" },
+        "freeSpirit": { "type": "number" },
+        "disruptor": { "type": "number" },
+        "philanthropist": { "type": "number" }
+      },
+      "required": ["achiever", "player", "socialiser", "freeSpirit", "disruptor", "philanthropist"],
+      "additionalProperties": false
+    },
+    "HexadSignature": {
+      "description": "Non-negative weights per Hexad type; at least one must be > 0. The engine normalizes them to sum 1.",
+      "type": "object",
+      "properties": {
+        "achiever": { "type": "number", "minimum": 0 },
+        "player": { "type": "number", "minimum": 0 },
+        "socialiser": { "type": "number", "minimum": 0 },
+        "freeSpirit": { "type": "number", "minimum": 0 },
+        "disruptor": { "type": "number", "minimum": 0 },
+        "philanthropist": { "type": "number", "minimum": 0 }
+      },
+      "required": ["achiever", "player", "socialiser", "freeSpirit", "disruptor", "philanthropist"],
+      "additionalProperties": false,
+      "anyOf": [
+        { "properties": { "achiever": { "type": "number", "exclusiveMinimum": 0 } } },
+        { "properties": { "player": { "type": "number", "exclusiveMinimum": 0 } } },
+        { "properties": { "socialiser": { "type": "number", "exclusiveMinimum": 0 } } },
+        { "properties": { "freeSpirit": { "type": "number", "exclusiveMinimum": 0 } } },
+        { "properties": { "disruptor": { "type": "number", "exclusiveMinimum": 0 } } },
+        { "properties": { "philanthropist": { "type": "number", "exclusiveMinimum": 0 } } }
+      ]
+    },
+    "Vector6": {
+      "description": "Array of 6 numbers in the fixed Hexad dimension order.",
+      "type": "array",
+      "items": { "type": "number" },
+      "minItems": 6,
+      "maxItems": 6
+    },
+    "Matrix6": {
+      "description": "6x6 matrix (row-major) in the fixed Hexad dimension order.",
+      "type": "array",
+      "items": { "$ref": "#/$defs/Vector6" },
+      "minItems": 6,
+      "maxItems": 6
+    },
+    "Unit": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "Id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "EpochMillis": {
+      "type": "integer",
+      "minimum": 0
+    }
+  }
+}

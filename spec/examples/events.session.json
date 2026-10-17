@@ -1,0 +1,7 @@
+[
+  { "type": "exposure",    "userId": "u_7f3a", "sessionId": "s_001", "at": 1760000000000, "elementId": "points",       "prominence": 0.8 },
+  { "type": "exposure",    "userId": "u_7f3a", "sessionId": "s_001", "at": 1760000000000, "elementId": "study_groups", "prominence": 0.3 },
+  { "type": "exposure",    "userId": "u_7f3a", "sessionId": "s_001", "at": 1760000000000, "elementId": "levels",       "prominence": 0.5 },
+  { "type": "interaction", "userId": "u_7f3a", "sessionId": "s_001", "at": 1760000120000, "elementId": "points" },
+  { "type": "outcome",     "userId": "u_7f3a", "sessionId": "s_001", "at": 1760003600000, "kind": "target", "value": 0.75 }
+]
