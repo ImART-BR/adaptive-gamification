@@ -2,17 +2,17 @@
 
 # Gamificação adaptativa
 
-Uma biblioteca, um app e um simulador para pesquisar **gamificação adaptativa**: interfaces gamificadas que se ajustam a cada pessoa a partir do que ela faz, sem questionário de perfil.
+Com base no conceito de **gamificação adaptativa** adotada no capítulo 4 da dissertação "Framework L para desenvolvedores de mHealth no contexto de self-care e gamificação" (Wanderley de Oliveira, 2018) foi criado esse projeto que conta com uma biblioteca, um app e um simulador para pesquisar **gamificação adaptativa**: interfaces gamificadas que se ajustam a cada pessoa a partir do que ela faz, baseado na tipologia Hexad de Marczewski.
 
-> **Status:** projeto de pesquisa em andamento. O motor e o simulador estão prontos e testados; os números do simulador vêm de um **mundo sintético** e não são evidência sobre pessoas reais. Isso será testado com o app, em um experimento A/B (desligado por padrão).
+> **Status:** projeto de pesquisa em andamento. O motor e o simulador estão prontos e testados; os números do simulador vêm de um **mundo sintético** e não são evidência sobre pessoas reais.
 >
 > **Idioma:** este README existe em português e em [inglês](README.en.md). O código, os comentários e os identificadores estão em inglês; a interface do app está em português.
 
 ## O que é gamificação adaptativa
 
-**Gamificação** é o uso de elementos de jogo (pontos, níveis, ranking, desafios, grupos…) fora de jogos, para estimular um comportamento, como estudar todo dia. O problema é que **a mesma gamificação para todos funciona mal**: o que motiva uma pessoa pode ser indiferente ou irritante para outra.
+**Gamificação** é o uso de elementos de jogo (pontos, níveis, ranking, desafios, grupos…) em contextos fora de jogos, para estimular um comportamento, como estudar todo dia. O problema é que **a mesma gamificação para todos funciona mal**: o que motiva uma pessoa pode ser indiferente ou irritante para outra.
 
-**Gamificação adaptativa** muda a interface gamificada para cada pessoa. A pergunta central é: *quais elementos mostrar, e com que destaque, para esta pessoa?*
+**Gamificação adaptativa** muda a interface gamificada para cada pessoa. A pergunta central é: *quais elementos mostrar, quando mostrar e com que destaque, para esta pessoa?*
 
 ### A tipologia Hexad
 
@@ -29,9 +29,9 @@ Usamos como base a tipologia **Hexad** de tipos de usuário de gamificação (pr
 
 ### O que este projeto faz de diferente
 
-1. **O perfil é um vetor de 6 números, não um rótulo.** Uma pessoa não "é" Achiever: ela tem uma mistura, que o sistema estima e atualiza.
+1. **O perfil é um vetor de 6 números.** Uma pessoa não está 100% pertencente apenas a um tipo de perfil: ela tem uma mistura, que o sistema estima e atualiza.
 2. **Sem questionário.** O perfil é aprendido do comportamento: o que foi exibido, em que a pessoa interagiu e se ela fez o que o app quer incentivar.
-3. **A recompensa é o comportamento-alvo do app** (aqui, concluir a fila de estudo do dia), não cliques. Cliques entram só como um sinal auxiliar pequeno.
+3. **A recompensa é o comportamento-alvo do app.** Cliques entram só como um sinal auxiliar pequeno.
 4. **Aprende e esquece.** É um bandit contextual (Thompson Sampling linear) com esquecimento, então acompanha mudanças de gosto, devagar.
 5. **Nunca esconde um elemento.** O motor devolve pesos de 0 a 1 com um piso; o app decide o que fazer com eles (destacar, reordenar, reduzir).
 
@@ -40,7 +40,7 @@ Usamos como base a tipologia **Hexad** de tipos de usuário de gamificação (pr
 | Parte | O que faz | Onde |
 |---|---|---|
 | **Core** | Biblioteca TypeScript pura (sem I/O, sem dependências). Recebe eventos de uso e devolve, a cada dia, o peso de cada elemento de gamificação para aquela pessoa | [`packages/core`](packages/core) |
-| **App** | "Estudo com cartões": app de flashcards com repetição espaçada, 19 elementos de gamificação (individuais e sociais) e um experimento A/B opcional em que o grupo adaptativo usa o core | [`packages/app-server`](packages/app-server), [`packages/app-web`](packages/app-web) |
+| **App** | "Estudo com cartões": app de flashcards com repetição espaçada, 19 elementos de gamificação (individuais e sociais) | [`packages/app-server`](packages/app-server), [`packages/app-web`](packages/app-web) |
 | **Simulador** | Usuários sintéticos com preferências Hexad escondidas, para medir se o motor aprende, e uma página interativa que mostra a interface mudando ao longo dos dias | [`packages/simulator`](packages/simulator) |
 
 ```mermaid
@@ -192,10 +192,10 @@ createEngine(config: EngineConfig): AdaptiveEngine
 
 - **Registre o que foi exibido.** `exposure` deve refletir a interface de fato, inclusive quando você suaviza ou limita os pesos.
 - **Escolha bem o `outcome`.** O motor otimiza o que você mandar. Use o comportamento que você quer incentivar, não cliques.
-- **Início suave.** Mesmo com crença neutra, a primeira decisão sorteada pode ser extrema (vários elementos no máximo e vários no piso). `softStartFactor` e `applySoftStart` encolhem os pesos na direção de 0,5 nos primeiros dias, crescendo de 25% a 100%. É política do app, não do motor.
+- **Início suave.** Mesmo com crença neutra, a primeira decisão sorteada pode ser extrema (vários elementos no máximo e vários no piso). `softStartFactor` e `applySoftStart` encolhem os pesos na direção de 0,5 nos primeiros dias, crescendo de 25% a 100%.
 - **Estado serializável.** `UserState` é JSON puro; guarde-o como quiser. Os formatos têm JSON Schemas em [`spec/schemas`](spec/schemas) para validar entrada e saída.
 - **Determinismo.** Mesmo estado, mesma semente e mesmos eventos dão sempre o mesmo resultado, o que torna os testes simples.
-- **Seu catálogo, suas assinaturas.** As assinaturas Hexad são *priors* da literatura e do julgamento da equipe, não verdade. Veja o catálogo de exemplo em [`spec/catalog.flashcards.json`](spec/catalog.flashcards.json). Variantes diferentes da mesma estratégia devem ser elementos diferentes.
+- **Seu catálogo, suas assinaturas.** As assinaturas Hexad são *priors* da literatura e do julgamento da equipe. Veja o catálogo de exemplo em [`spec/catalog.flashcards.json`](spec/catalog.flashcards.json). Variantes diferentes da mesma estratégia devem ser elementos diferentes.
 - **Limite conhecido:** o acompanhamento de uma mudança de gosto é lento (dezenas de dias), e a história de uma única pessoa é ruidosa. Veja a seção do simulador.
 
 ```bash
@@ -251,7 +251,7 @@ Outros comandos: `npm run export` (eventos de pesquisa anonimizados em `data/exp
 
 ### Como ele se conecta ao core
 
-Com o experimento **desligado** (padrão), todos veem a mesma interface, com todos os pesos em 0,5. Com `EXPERIMENT=on`:
+Essa aplicação foi pensada para que o conceito de **gamificação adaptativa** pudesse ser avaliado em um experimento A/B. Com o experimento **desligado** (padrão), todos veem a mesma interface, com todos os pesos em 0,5. Com `EXPERIMENT=on`:
 
 ```mermaid
 flowchart TD

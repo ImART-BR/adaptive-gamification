@@ -2,17 +2,17 @@
 
 # Adaptive gamification
 
-A library, an app and a simulator for researching **adaptive gamification**: gamified interfaces that adjust to each person based on what they do, with no profile questionnaire.
+Based on the concept of **adaptive gamification** adopted in chapter 4 of the dissertation *Framework L para desenvolvedores de mHealth no contexto de self-care e gamificação* (Wanderley de Oliveira, 2018; in Portuguese, free translation of the title: "L Framework for mHealth developers in the context of self-care and gamification"), this project was created. It includes a library, an app and a simulator to research **adaptive gamification**: gamified interfaces that adjust to each person based on what they do, grounded in Marczewski's Hexad typology.
 
-> **Status:** research in progress. The engine and the simulator are finished and tested; the simulator's numbers come from a **synthetic world** and are not evidence about real people. That will be tested with the app, in an A/B experiment (off by default).
+> **Status:** research in progress. The engine and the simulator are finished and tested; the simulator's numbers come from a **synthetic world** and are not evidence about real people.
 >
 > **Language note:** this README is available in English and [Portuguese](README.md). The code, comments and identifiers are in English; the app's interface is in Brazilian Portuguese.
 
 ## What is adaptive gamification?
 
-**Gamification** is the use of game elements (points, levels, leaderboards, challenges, groups…) outside games, to encourage a behavior such as studying every day. The catch is that **one gamification for everyone works poorly**: what motivates one person can leave another indifferent or annoyed.
+**Gamification** is the use of game elements (points, levels, leaderboards, challenges, groups…) in contexts outside games, to encourage a behavior such as studying every day. The catch is that **one gamification for everyone works poorly**: what motivates one person can leave another indifferent or annoyed.
 
-**Adaptive gamification** changes the gamified interface for each person. The central question is: *which elements should be shown, and how prominently, to this person?*
+**Adaptive gamification** changes the gamified interface for each person. The central question is: *which elements should be shown, when should they be shown, and how prominently, to this person?*
 
 ### The Hexad typology
 
@@ -29,9 +29,9 @@ We build on the **Hexad** typology of gamification user types (proposed by Andrz
 
 ### What this project does differently
 
-1. **The profile is a vector of 6 numbers, not a label.** A person is not "an Achiever": they have a mix, which the system estimates and keeps updating.
+1. **The profile is a vector of 6 numbers.** A person does not belong 100% to a single profile type: they have a mix, which the system estimates and keeps updating.
 2. **No questionnaire.** The profile is learned from behavior: what was shown, what the person interacted with, and whether they did what the app wants to encourage.
-3. **The reward is the app's target behavior** (here, finishing the day's study queue), not clicks. Clicks enter only as a small auxiliary signal.
+3. **The reward is the app's target behavior.** Clicks enter only as a small auxiliary signal.
 4. **It learns and forgets.** It is a contextual bandit (linear Thompson Sampling) with forgetting, so it follows changes of taste, slowly.
 5. **It never hides an element.** The engine returns weights from 0 to 1 with a floor; the app decides what to do with them (highlight, reorder, shrink).
 
@@ -40,7 +40,7 @@ We build on the **Hexad** typology of gamification user types (proposed by Andrz
 | Part | What it does | Where |
 |---|---|---|
 | **Core** | A pure TypeScript library (no I/O, no dependencies). It receives usage events and returns, each day, the weight of every gamification element for that person | [`packages/core`](packages/core) |
-| **App** | "Estudo com cartões" (Study with cards): a flashcard app with spaced repetition, 19 gamification elements (individual and social) and an optional A/B experiment in which the adaptive group uses the core | [`packages/app-server`](packages/app-server), [`packages/app-web`](packages/app-web) |
+| **App** | "Estudo com cartões" (Study with cards): a flashcard app with spaced repetition, 19 gamification elements (individual and social) | [`packages/app-server`](packages/app-server), [`packages/app-web`](packages/app-web) |
 | **Simulator** | Synthetic users with hidden Hexad preferences, to measure whether the engine learns, plus an interactive page that shows the interface changing over the days | [`packages/simulator`](packages/simulator) |
 
 > The app's interface is in Brazilian Portuguese.
@@ -194,10 +194,10 @@ createEngine(config: EngineConfig): AdaptiveEngine
 
 - **Record what was shown.** `exposure` must reflect the actual interface, including when you smooth or cap the weights.
 - **Choose the `outcome` carefully.** The engine optimizes whatever you send. Use the behavior you want to encourage, not clicks.
-- **Soft start.** Even with a neutral belief, the first sampled decision can be extreme (several elements at the maximum and several at the floor). `softStartFactor` and `applySoftStart` shrink the weights toward 0.5 in the first days, growing from 25% to 100%. This is app policy, not part of the engine.
+- **Soft start.** Even with a neutral belief, the first sampled decision can be extreme (several elements at the maximum and several at the floor). `softStartFactor` and `applySoftStart` shrink the weights toward 0.5 in the first days, growing from 25% to 100%.
 - **Serializable state.** `UserState` is plain JSON; store it however you like. The formats have JSON Schemas in [`spec/schemas`](spec/schemas) to validate input and output.
 - **Determinism.** The same state, seed and events always give the same result, which keeps tests simple.
-- **Your catalog, your signatures.** Hexad signatures are *priors* from the literature and the team's judgment, not ground truth. See the example catalog in [`spec/catalog.flashcards.json`](spec/catalog.flashcards.json). Different variants of the same strategy should be different elements.
+- **Your catalog, your signatures.** Hexad signatures are *priors* from the literature and the team's judgment. See the example catalog in [`spec/catalog.flashcards.json`](spec/catalog.flashcards.json). Different variants of the same strategy should be different elements.
 - **Known limit:** following a change of taste is slow (tens of days), and one person's history is noisy. See the simulator section.
 
 ```bash
@@ -253,7 +253,7 @@ Other commands: `npm run export` (anonymized research events in `data/export/`) 
 
 ### How it connects to the core
 
-With the experiment **off** (default), everyone sees the same interface, with every weight at 0.5. With `EXPERIMENT=on`:
+This application was designed so that the concept of **adaptive gamification** could be evaluated in an A/B experiment. With the experiment **off** (default), everyone sees the same interface, with every weight at 0.5. With `EXPERIMENT=on`:
 
 ```mermaid
 flowchart TD
